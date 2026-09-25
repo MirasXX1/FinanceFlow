@@ -1,6 +1,10 @@
 import { prisma } from "@/lib/prisma";
 import { requireAuth } from "@/lib/auth";
-import { getTransactions, transactionQuerySchema } from "@/lib/transactions";
+import {
+  getTransactions,
+  transactionQuerySchema,
+} from "@/lib/transactions";
+
 import type { CurrencyCode } from "@/lib/format";
 import type { TransactionType } from "@/lib/types";
 
@@ -8,33 +12,46 @@ import { PageHeader } from "@/components/layout/page-header";
 import { TransactionsView } from "@/components/transactions/transactions-view";
 import { I18nText } from "@/components/i18n-text";
 
-export const metadata = { title: "Transactions" };
+export const metadata = {
+  title: "Transactions",
+};
 
-type SearchParams = Promise<Record<string, string | string[] | undefined>>;
+type TransactionsSearchParams = {
+  [key: string]: string | string[] | undefined;
+};
 
 export default async function TransactionsPage({
   searchParams,
 }: {
-  searchParams: SearchParams;
+  searchParams: Promise<TransactionsSearchParams>;
 }) {
   const sessionUser = await requireAuth();
 
   const params = await searchParams;
-  const query = transactionQuerySchema.safeParse(params);
 
-  const parsedQuery = query.success
-    ? query.data
+  const parsed = transactionQuerySchema.safeParse(params);
+
+  const parsedQuery = parsed.success
+    ? parsed.data
     : transactionQuerySchema.parse({});
 
   const [user, categories, hasAnyTransaction, list] = await Promise.all([
     prisma.user.findUnique({
-      where: { id: sessionUser.id },
-      select: { currency: true },
+      where: {
+        id: sessionUser.id,
+      },
+      select: {
+        currency: true,
+      },
     }),
 
     prisma.category.findMany({
-      where: { userId: sessionUser.id },
-      orderBy: { name: "asc" },
+      where: {
+        userId: sessionUser.id,
+      },
+      orderBy: {
+        name: "asc",
+      },
       select: {
         id: true,
         name: true,
@@ -43,7 +60,9 @@ export default async function TransactionsPage({
     }),
 
     prisma.transaction.count({
-      where: { userId: sessionUser.id },
+      where: {
+        userId: sessionUser.id,
+      },
     }),
 
     getTransactions(sessionUser.id, parsedQuery),
