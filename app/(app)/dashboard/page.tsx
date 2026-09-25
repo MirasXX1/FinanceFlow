@@ -8,7 +8,7 @@ import {
 import { prisma } from "@/lib/prisma";
 import { requireAuth } from "@/lib/auth";
 import { getExpenseByCategory, getMonthlySeries } from "@/lib/analytics";
-import { formatMoneyCompact, formatDayMonth } from "@/lib/format";
+import { formatDayMonth } from "@/lib/format";
 
 import { StatCard } from "@/components/dashboard/stat-card";
 import { DashboardActions } from "@/components/dashboard/dashboard-actions";

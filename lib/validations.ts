@@ -69,7 +69,9 @@ const goalName = z
 const goalColor = z
   .string()
   .trim()
-  .regex(/^#[0-9a-fA-F]{6}$/, "Color must be a hex value.")
+  .min(1)
+  .max(20)
+  .regex(/^#[0-9a-fA-F]{6}$|^[a-z]+$/i, "Color must be a hex value or a color name.")
   .nullable()
   .optional()
   .transform((value) => (value ? value.toLowerCase() : undefined));

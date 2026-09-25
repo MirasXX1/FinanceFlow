@@ -30,3 +30,15 @@ export interface SessionUserInfo {
   email: string;
   currency: CurrencyCode;
 }
+
+export interface GoalRow {
+  id: string;
+  name: string;
+  targetAmount: number;
+  currentAmount: number;
+  /** ISO date string or null */
+  deadline: string | null;
+  color: string | null;
+  /** Computed server-side to keep client rendering timezone-stable. */
+  isOverdue: boolean;
+}
