@@ -9,6 +9,7 @@ import { prisma } from "@/lib/prisma";
 import { requireAuth } from "@/lib/auth";
 
 import { StatCard } from "@/components/dashboard/stat-card";
+import { DashboardActions } from "@/components/dashboard/dashboard-actions";
 import { PageHeader } from "@/components/layout/page-header";
 import {
   Card,
@@ -37,6 +38,20 @@ export default async function DashboardPage() {
   if (!user) {
     throw new Error("User not found");
   }
+
+  const categories = await prisma.category.findMany({
+    where: {
+      userId: user.id,
+    },
+    orderBy: {
+      name: "asc",
+    },
+    select: {
+      id: true,
+      name: true,
+      icon: true,
+    },
+  });
 
   const transactions = await prisma.transaction.findMany({
     where: {
@@ -83,6 +98,11 @@ export default async function DashboardPage() {
       <PageHeader
         title="Dashboard"
         description="Your financial overview at a glance."
+      />
+
+      <DashboardActions
+        categories={categories}
+        currency={user.currency}
       />
 
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
