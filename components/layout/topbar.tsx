@@ -1,12 +1,14 @@
+import { auth } from "@/auth";
 import { Bell } from "lucide-react";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/theme/theme-toggle";
 import { Logo } from "./logo";
 
-export function Topbar() {
-  // TODO (Phase 3): replace with the real logged-in user from the session.
-  const userName = "Guest";
+export async function Topbar() {
+  const session = await auth();
+  const user = session?.user;
+  const userName = user?.name || user?.email?.split("@")[0] || "User";
 
   return (
     <header className="sticky top-0 z-20 flex h-16 items-center justify-between border-b bg-background/80 px-4 backdrop-blur md:px-8">

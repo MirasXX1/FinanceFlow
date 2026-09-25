@@ -7,13 +7,19 @@ import {
 
 import { prisma } from "@/lib/prisma";
 import { requireAuth } from "@/lib/auth";
+import { getExpenseByCategory, getMonthlySeries } from "@/lib/analytics";
+import { formatDayMonth } from "@/lib/format";
 
 import { StatCard } from "@/components/dashboard/stat-card";
 import { DashboardActions } from "@/components/dashboard/dashboard-actions";
+import { IncomeExpenseChart } from "@/components/charts/income-expense-chart";
+import { ExpenseCategoriesChart } from "@/components/charts/expense-categories-chart";
 import { PageHeader } from "@/components/layout/page-header";
+import { CategoryIcon } from "@/components/categories/category-icon";
 import {
   Card,
   CardContent,
+  CardDescription,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
@@ -39,42 +45,43 @@ export default async function DashboardPage() {
     throw new Error("User not found");
   }
 
-  const categories = await prisma.category.findMany({
-    where: {
-      userId: user.id,
-    },
-    orderBy: {
-      name: "asc",
-    },
-    select: {
-      id: true,
-      name: true,
-      icon: true,
-    },
-  });
-
-  const transactions = await prisma.transaction.findMany({
-    where: {
-      userId: user.id,
-    },
-    include: {
-      category: true,
-    },
-    orderBy: {
-      date: "desc",
-    },
-    take: 5,
-  });
-
-  const totals = await prisma.transaction.groupBy({
-    by: ["type"],
-    where: {
-      userId: user.id,
-    },
-    _sum: {
-      amount: true,
-    },
-  });
+  const [categories, transactions, totals, monthlySeries, expenseByCategory] =
+    await Promise.all([
+      prisma.category.findMany({
+        where: {
+          userId: user.id,
+        },
+        orderBy: {
+          name: "asc",
+        },
+        select: {
+          id: true,
+          name: true,
+          icon: true,
+        },
+      }),
+      prisma.transaction.findMany({
+        where: {
+          userId: user.id,
+        },
+        include: {
+          category: true,
+        },
+        orderBy: [{ date: "desc" }, { createdAt: "desc" }],
+        take: 5,
+      }),
+      prisma.transaction.groupBy({
+        by: ["type"],
+        where: {
+          userId: user.id,
+        },
+        _sum: {
+          amount: true,
+        },
+      }),
+      getMonthlySeries(user.id, 6),
+      getExpenseByCategory(user.id),
+    ]);
 
   const income = Number(
     totals.find((item) => item.type === "INCOME")?._sum.amount ?? 0
@@ -137,10 +144,15 @@ export default async function DashboardPage() {
         <Card className="lg:col-span-2">
           <CardHeader>
             <CardTitle>Income vs Expenses</CardTitle>
+
+            <CardDescription>Your last 6 months at a glance.</CardDescription>
           </CardHeader>
 
-          <CardContent className="flex h-64 items-center justify-center text-sm text-muted-foreground">
-            Chart will be added next.
+          <CardContent>
+            <IncomeExpenseChart
+              data={monthlySeries}
+              currency={user.currency}
+            />
           </CardContent>
         </Card>
 
@@ -161,15 +173,27 @@ export default async function DashboardPage() {
                     key={transaction.id}
                     className="flex items-center justify-between gap-3"
                   >
-                    <div className="min-w-0">
-                      <p className="truncate text-sm font-medium">
-                        {transaction.description || "Transaction"}
-                      </p>
+                    <div className="flex min-w-0 items-center gap-2.5">
+                      <span
+                        className={
+                          transaction.type === "INCOME"
+                            ? "flex size-8 shrink-0 items-center justify-center rounded-full bg-emerald-600/10 text-emerald-600"
+                            : "flex size-8 shrink-0 items-center justify-center rounded-full bg-red-600/10 text-red-600"
+                        }
+                      >
+                        <CategoryIcon icon={transaction.category?.icon} />
+                      </span>
 
-                      <p className="text-xs text-muted-foreground">
-                        {transaction.category?.icon}{" "}
-                        {transaction.category?.name || "Other"}
-                      </p>
+                      <div className="min-w-0">
+                        <p className="truncate text-sm font-medium">
+                          {transaction.description || "Transaction"}
+                        </p>
+
+                        <p className="text-xs text-muted-foreground">
+                          {transaction.category?.name || "Other"} ·{" "}
+                          {formatDayMonth(transaction.date)}
+                        </p>
+                      </div>
                     </div>
 
                     <span
@@ -189,6 +213,21 @@ export default async function DashboardPage() {
           </CardContent>
         </Card>
       </div>
+
+      <Card className="mt-4">
+        <CardHeader>
+          <CardTitle>Expense Categories</CardTitle>
+
+          <CardDescription>Where your money goes.</CardDescription>
+        </CardHeader>
+
+        <CardContent>
+          <ExpenseCategoriesChart
+            data={expenseByCategory}
+            currency={user.currency}
+          />
+        </CardContent>
+      </Card>
     </>
   );
 }
