@@ -8,6 +8,7 @@ import { cn } from "@/lib/utils";
 export interface CategorySlice {
   name: string;
   value: number;
+  icon?: string | null;
 }
 
 export const CATEGORY_CHART_COLORS = [

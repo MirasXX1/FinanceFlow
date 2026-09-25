@@ -57,15 +57,45 @@ export async function getMonthlySeries(userId: string, months = 6): Promise<Mont
 }
 
 /**
+ * All-time income/expense totals for a user.
+ */
+export async function getTotals(userId: string): Promise<{
+  income: number;
+  expenses: number;
+}> {
+  const grouped = await prisma.transaction.groupBy({
+    by: ["type"],
+    where: { userId },
+    _sum: { amount: true },
+  });
+
+  return {
+    income: Number(grouped.find((item) => item.type === "INCOME")?._sum.amount ?? 0),
+    expenses: Number(grouped.find((item) => item.type === "EXPENSE")?._sum.amount ?? 0),
+  };
+}
+
+/**
  * Expense totals grouped by category, highest first.
  */
-export async function getExpenseByCategory(userId: string): Promise<CategorySlice[]> {
+export async function getExpenseByCategory(
+  userId: string,
+  options?: { from?: Date; to?: Date }
+): Promise<CategorySlice[]> {
   const grouped = await prisma.transaction.groupBy({
     by: ["categoryId"],
     where: {
       userId,
       type: "EXPENSE",
       categoryId: { not: null },
+      ...(options?.from || options?.to
+        ? {
+            date: {
+              ...(options.from ? { gte: options.from } : {}),
+              ...(options.to ? { lte: options.to } : {}),
+            },
+          }
+        : {}),
     },
     _sum: {
       amount: true,
@@ -92,19 +122,25 @@ export async function getExpenseByCategory(userId: string): Promise<CategorySlic
     select: {
       id: true,
       name: true,
+      icon: true,
     },
   });
 
-  const names = new Map(categories.map((category) => [category.id, category.name]));
+  const names = new Map(
+    categories.map((category) => [category.id, { name: category.name, icon: category.icon }])
+  );
 
   const slices: CategorySlice[] = [];
 
   for (const item of grouped) {
     if (!item.categoryId) continue;
 
+    const info = names.get(item.categoryId);
+
     slices.push({
-      name: names.get(item.categoryId) || "Other",
+      name: info?.name || "Other",
       value: Number(item._sum.amount ?? 0),
+      icon: info?.icon ?? null,
     });
   }
 
