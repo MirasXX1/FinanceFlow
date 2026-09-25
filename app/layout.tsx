@@ -1,11 +1,17 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import localFont from "next/font/local";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
 import { APP_NAME, APP_TAGLINE } from "@/lib/constants";
 
-const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
+// Inter variable font, self-hosted (latin subset) — no external font request at build/runtime.
+const inter = localFont({
+  src: "./fonts/inter-latin-wght-normal.woff2",
+  weight: "100 900",
+  display: "swap",
+  variable: "--font-inter",
+});
 
 export const metadata: Metadata = {
   title: { default: `${APP_NAME} – ${APP_TAGLINE}`, template: `%s | ${APP_NAME}` },
