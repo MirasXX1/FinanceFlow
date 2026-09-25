@@ -62,6 +62,9 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     strategy: "jwt",
   },
 
+  // Required when running behind a proxy/preview host (and on Vercel).
+  trustHost: true,
+
   callbacks: {
     async jwt({ token, user }) {
       if (user) {

@@ -1,46 +1,73 @@
 import { NextResponse } from "next/server";
-import { z } from "zod";
 
-import { prisma } from "@/lib/prisma";
 import { auth } from "@/auth";
+import { prisma } from "@/lib/prisma";
+import { dateToUtcNoon, round2 } from "@/lib/format";
+import { transactionCreateSchema } from "@/lib/validations";
+import { getTransactions, transactionQuerySchema } from "@/lib/transactions";
 
-const transactionSchema = z.object({
-  type: z.enum(["INCOME", "EXPENSE"]),
-  amount: z.number().positive(),
-  categoryId: z.string().optional(),
-  description: z.string().optional(),
-  date: z.string(),
-});
+// ---------------------------------------------------------------------------
+// GET /api/transactions — list with search, filters, sorting and pagination
+// ---------------------------------------------------------------------------
+
+export async function GET(request: Request) {
+  try {
+    const session = await auth();
+
+    if (!session?.user?.id) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
+    const params = Object.fromEntries(new URL(request.url).searchParams);
+    const result = transactionQuerySchema.safeParse(params);
+
+    if (!result.success) {
+      return NextResponse.json(
+        { error: "Invalid query parameters." },
+        { status: 400 }
+      );
+    }
+
+    const data = await getTransactions(session.user.id, result.data);
+
+    return NextResponse.json(data);
+  } catch (error) {
+    console.error("List transactions error:", error);
+
+    return NextResponse.json(
+      { error: "Failed to load transactions." },
+      { status: 500 }
+    );
+  }
+}
+
+// ---------------------------------------------------------------------------
+// POST /api/transactions — create an income or expense
+// ---------------------------------------------------------------------------
 
 export async function POST(request: Request) {
   try {
     const session = await auth();
 
     if (!session?.user?.id) {
-      return NextResponse.json(
-        { error: "Unauthorized" },
-        { status: 401 }
-      );
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const body = await request.json();
+    const body: unknown = await request.json().catch(() => null);
 
-    const result = transactionSchema.safeParse(body);
+    const result = transactionCreateSchema.safeParse(body);
 
     if (!result.success) {
       return NextResponse.json(
-        { error: "Invalid transaction data." },
+        {
+          error: "Invalid transaction data.",
+          fieldErrors: result.error.flatten().fieldErrors,
+        },
         { status: 400 }
       );
     }
 
-    const {
-      type,
-      amount,
-      categoryId,
-      description,
-      date,
-    } = result.data;
+    const { type, amount, categoryId, description, date } = result.data;
 
     if (categoryId) {
       const category = await prisma.category.findFirst({
@@ -62,13 +89,15 @@ export async function POST(request: Request) {
       data: {
         userId: session.user.id,
         type,
-        amount,
+        amount: round2(amount),
         categoryId: categoryId || null,
         description: description || null,
-        date: new Date(date),
+        date: dateToUtcNoon(date),
       },
       include: {
-        category: true,
+        category: {
+          select: { name: true, icon: true },
+        },
       },
     });
 
