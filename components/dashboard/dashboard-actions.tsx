@@ -5,6 +5,8 @@ import { ArrowDownCircle, ArrowUpCircle } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { TransactionFormDialog } from "@/components/transactions/transaction-form-dialog";
+import { useI18n } from "@/components/i18n-provider";
+
 import type { CategoryOption, TransactionType } from "@/lib/types";
 
 type DashboardActionsProps = {
@@ -17,6 +19,7 @@ export function DashboardActions({
   currency,
 }: DashboardActionsProps) {
   const [activeType, setActiveType] = useState<TransactionType | null>(null);
+  const { t } = useI18n();
 
   return (
     <>
@@ -26,7 +29,7 @@ export function DashboardActions({
           className="gap-2"
         >
           <ArrowUpCircle className="h-4 w-4" />
-          Add Income
+          {t.dashboard.addIncome}
         </Button>
 
         <Button
@@ -35,7 +38,7 @@ export function DashboardActions({
           className="gap-2"
         >
           <ArrowDownCircle className="h-4 w-4" />
-          Add Expense
+          {t.dashboard.addExpense}
         </Button>
       </div>
 
