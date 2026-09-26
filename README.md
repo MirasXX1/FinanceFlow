@@ -2,127 +2,413 @@
 
 **Take control of your money.**
 
-A full-stack personal finance web application: track income and expenses, set
-savings goals, and understand where your money goes with real charts and
-statistics — backed by a real PostgreSQL database.
+FinanceFlow is a full-stack personal finance management web application for tracking income and expenses, managing savings goals, and understanding spending through interactive statistics and charts.
 
-## Features
+Built with **Next.js, TypeScript, PostgreSQL, Prisma, Auth.js, Tailwind CSS, and Recharts** and deployed with **Vercel + Neon**.
 
-- **Authentication** — email/password sign-up and sign-in (Auth.js v5, bcrypt,
-  JWT sessions), protected routes via `proxy.ts`
-- **Dashboard** — balance, income, expenses, savings, income-vs-expenses chart,
-  expense category donut, recent transactions, quick add income/expense
-- **Transactions** — full CRUD with Zod validation, search, type/category/date
-  filters, sorting, DB-level pagination, edit/delete dialogs
-- **Goals** — savings targets with progress bars, deadlines, color accents and
-  per-goal statistics
-- **Statistics** — monthly analysis, spending trends, top categories and factual
-  insights generated from your data
-- **Settings** — profile name, currency (KZT / USD / EUR), theme
-  (system / light / dark), notifications, password change
-- **Responsive SaaS UI** — light/dark mode, mobile navigation, loading
-  skeletons, empty states, toasts and confirmation dialogs
+## 🌐 Live Demo
 
-## Tech stack
+**Production:**
+https://finance-flow-lovat-ten.vercel.app
 
-| Layer | Tools |
-| --- | --- |
-| Framework | Next.js 16 (App Router), React 19, TypeScript |
-| UI | Tailwind CSS v4, shadcn/ui components, Lucide icons, Recharts, Sonner |
-| Database | PostgreSQL (Neon in production), Prisma ORM (driver adapters + queryCompiler) |
-| Auth | Auth.js / NextAuth v5 (credentials provider, JWT sessions) |
-| Validation | Zod |
-| Deployment | Vercel |
+## ✨ Features
 
-## Getting started
+### 🔐 Authentication
+
+* Email/password registration and login
+* Secure password hashing with bcrypt
+* Auth.js / NextAuth authentication
+* JWT sessions
+* Protected application routes
+* Secure user-specific data access
+
+### 💰 Dashboard
+
+* Current balance
+* Total income
+* Total expenses
+* Savings
+* Monthly income vs. expenses chart
+* Spending by category
+* Recent transactions
+* Quick income and expense actions
+
+### 💳 Transactions
+
+* Create transactions
+* Edit transactions
+* Delete transactions
+* Income and expense types
+* Categories
+* Search
+* Filtering by type, category, and date
+* Sorting
+* Pagination
+* Zod validation
+
+### 🎯 Financial Goals
+
+* Create savings goals
+* Set target amounts
+* Track progress
+* Set deadlines
+* Edit and delete goals
+* Per-goal statistics
+
+### 📊 Statistics
+
+* Monthly financial analysis
+* Income and expense trends
+* Spending by category
+* Top spending categories
+* Financial insights based on user data
+
+### ⚙️ Settings
+
+* Update profile name
+* Change currency
+* Light / dark / system theme
+* Notification preferences
+* Change password
+
+### 🌍 Internationalization
+
+* 🇬🇧 English
+* 🇷🇺 Russian
+* 🇰🇿 Kazakh
+
+### 📱 Responsive UI
+
+* Desktop layout
+* Mobile navigation
+* Responsive dashboard
+* Dark mode
+* Loading states
+* Empty states
+* Confirmation dialogs
+* Toast notifications
+
+## 🛠 Tech Stack
+
+| Layer            | Technology             |
+| ---------------- | ---------------------- |
+| Framework        | Next.js 16, App Router |
+| Language         | TypeScript             |
+| Frontend         | React 19               |
+| Styling          | Tailwind CSS v4        |
+| UI Components    | shadcn/ui              |
+| Icons            | Lucide React           |
+| Charts           | Recharts               |
+| Database         | PostgreSQL             |
+| Database Hosting | Neon                   |
+| ORM              | Prisma                 |
+| Authentication   | Auth.js / NextAuth v5  |
+| Password Hashing | bcrypt                 |
+| Validation       | Zod                    |
+| Deployment       | Vercel                 |
+
+## 🏗 Architecture
+
+```text
+┌─────────────────────┐
+│       Browser       │
+│   React / Next.js   │
+└──────────┬──────────┘
+           │
+           ▼
+┌─────────────────────┐
+│       Vercel        │
+│    Next.js App      │
+│                     │
+│  Server Components  │
+│  API Routes         │
+│  Authentication     │
+└──────────┬──────────┘
+           │
+           ▼
+┌─────────────────────┐
+│       Prisma        │
+│         ORM         │
+└──────────┬──────────┘
+           │
+           ▼
+┌─────────────────────┐
+│        Neon         │
+│     PostgreSQL      │
+└─────────────────────┘
+```
+
+## 📁 Project Structure
+
+```text
+financeflow/
+├── app/
+│   ├── (app)/
+│   │   ├── dashboard/
+│   │   ├── goals/
+│   │   ├── settings/
+│   │   ├── statistics/
+│   │   └── transactions/
+│   ├── api/
+│   │   ├── auth/
+│   │   ├── goals/
+│   │   ├── register/
+│   │   ├── settings/
+│   │   └── transactions/
+│   ├── login/
+│   ├── register/
+│   └── page.tsx
+│
+├── components/
+│   ├── charts/
+│   ├── goals/
+│   ├── layout/
+│   ├── settings/
+│   ├── transactions/
+│   └── ui/
+│
+├── lib/
+│   ├── i18n/
+│   ├── auth.ts
+│   ├── prisma.ts
+│   └── types.ts
+│
+├── prisma/
+│   ├── migrations/
+│   ├── schema.prisma
+│   └── seed.ts
+│
+├── public/
+├── auth.ts
+├── proxy.ts
+├── prisma.config.ts
+├── package.json
+└── README.md
+```
+
+## 🚀 Getting Started
 
 ### 1. Prerequisites
 
-- Node.js 20+
-- A PostgreSQL database (local or a free [Neon](https://neon.tech) project)
+Make sure you have:
 
-### 2. Install dependencies
+* Node.js 20+
+* npm
+* PostgreSQL database
+* Git
+
+You can use a free PostgreSQL database from [Neon](https://neon.tech).
+
+### 2. Clone the repository
+
+```bash
+git clone https://github.com/MirasXX1/FinanceFlow.git
+cd FinanceFlow
+```
+
+### 3. Install dependencies
 
 ```bash
 npm install
 ```
 
-### 3. Configure environment
+### 4. Configure environment variables
+
+Create a local `.env` file:
 
 ```bash
 cp .env.example .env
 ```
 
-Fill in `.env`:
+Configure the required variables:
 
 ```env
 DATABASE_URL="postgresql://..."
-AUTH_SECRET="$(openssl rand -base64 32)"
+AUTH_SECRET="your-secret"
 SEED_USER_EMAIL="demo@financeflow.app"
 SEED_USER_PASSWORD="demo12345"
 ```
 
-> `.env` is git-ignored and must never be committed.
+> Never commit `.env` to GitHub.
 
-### 4. Apply migrations and seed demo data
-
-```bash
-npm run db:migrate:deploy   # apply Prisma migrations
-npm run db:seed             # seed demo user + sample data
-```
-
-Demo account: `demo@financeflow.app` / `demo12345`
-
-### 5. Run
+### 5. Generate Prisma Client
 
 ```bash
-npm run dev    # development
-npm run build  # production build
-npm start      # production server
+npx prisma generate
 ```
 
-## Deployment (Vercel + Neon)
+### 6. Apply database migrations
 
-1. Push the repository to GitHub.
-2. Create a PostgreSQL database on [Neon](https://neon.tech) and copy the
-   **pooled** connection string.
-3. Import the project on [Vercel](https://vercel.com) and set the environment
-   variables:
+```bash
+npm run db:migrate:deploy
+```
 
-   | Variable | Value |
-   | --- | --- |
-   | `DATABASE_URL` | Neon pooled connection string (`?sslmode=require`) |
-   | `AUTH_SECRET` | A fresh `openssl rand -base64 32` value (not the dev one) |
+### 7. Seed demo data
 
-4. Apply migrations to the production database from your machine (or CI):
+```bash
+npm run db:seed
+```
 
-   ```bash
-   DATABASE_URL="<production-url>" npx prisma migrate deploy
-   ```
+The seed creates a demo user, default categories, sample transactions, and financial goals.
 
-   > Never run `prisma migrate reset` against production.
+### 8. Start development server
 
-5. Deploy. Every push to `main` will trigger a new deployment.
+```bash
+npm run dev
+```
 
-## Useful scripts
+Open:
 
-| Command | Description |
-| --- | --- |
-| `npm run dev` | Start the dev server |
-| `npm run build` | Generate the Prisma client and build |
-| `npm run lint` | ESLint |
-| `npm run db:migrate:deploy` | Apply migrations (safe for production) |
-| `npm run db:seed` | Seed the demo user and data |
-| `npm run db:studio` | Open Prisma Studio |
+```text
+http://localhost:3000
+```
 
-## Security notes
+## 🧪 Useful Commands
 
-- Every private API route authenticates the session and scopes all Prisma
-  queries by `userId` — users can never read or modify another user's data.
-- All mutations are validated with Zod before touching the database.
-- Passwords are hashed with bcrypt; error messages never leak internals.
-- Secrets live only in environment variables (`.env` is git-ignored).
+| Command                     | Description                      |
+| --------------------------- | -------------------------------- |
+| `npm run dev`               | Start development server         |
+| `npm run build`             | Build the production application |
+| `npm start`                 | Start the production server      |
+| `npm run lint`              | Run ESLint                       |
+| `npx tsc --noEmit`          | Check TypeScript                 |
+| `npm run db:migrate:deploy` | Apply Prisma migrations          |
+| `npm run db:seed`           | Seed demo data                   |
+| `npm run db:studio`         | Open Prisma Studio               |
 
-## License
+## ☁️ Deployment
 
-MIT
+FinanceFlow is deployed using:
+
+* **Vercel** — Next.js hosting
+* **Neon** — PostgreSQL database
+* **GitHub** — source code and version control
+
+Production deployment:
+
+**https://finance-flow-lovat-ten.vercel.app**
+
+Every push to the `main` branch can trigger a new Vercel deployment.
+
+### Production Environment Variables
+
+The following environment variables are required:
+
+| Variable       | Description                       |
+| -------------- | --------------------------------- |
+| `DATABASE_URL` | Neon PostgreSQL connection string |
+| `AUTH_SECRET`  | Secret used by Auth.js            |
+
+> Production secrets must never be committed to GitHub.
+
+## 🔒 Security
+
+FinanceFlow includes several security measures:
+
+* Passwords are hashed with bcrypt.
+* Protected routes require authentication.
+* API routes validate the authenticated user.
+* Database queries are scoped by `userId`.
+* Users cannot access another user's transactions or financial goals.
+* Input is validated using Zod.
+* Sensitive environment variables are stored outside the repository.
+* `.env` is excluded from Git using `.gitignore`.
+
+## 🗄️ Database
+
+FinanceFlow uses PostgreSQL with Prisma.
+
+Main models include:
+
+```text
+User
+ ├── Account
+ ├── Session
+ ├── Category
+ ├── Transaction
+ └── FinancialGoal
+```
+
+Transactions support:
+
+```text
+INCOME
+EXPENSE
+```
+
+Supported currencies:
+
+```text
+KZT
+USD
+EUR
+```
+
+Default transaction categories:
+
+```text
+Food
+Transport
+Entertainment
+Education
+Shopping
+Health
+Bills
+Travel
+Other
+```
+
+## 🌍 Localization
+
+The application supports three languages:
+
+```text
+English
+Русский
+Қазақша
+```
+
+The selected language is stored locally in the browser and can be changed from the application interface.
+
+## 🎯 Project Goals
+
+FinanceFlow was created as a full-stack portfolio project to practice:
+
+* Next.js
+* React
+* TypeScript
+* REST API development
+* Authentication
+* PostgreSQL
+* Prisma ORM
+* Database design
+* Form validation
+* Data visualization
+* Responsive UI
+* Internationalization
+* Git/GitHub
+* Production deployment
+
+## 📸 Screenshots
+
+Screenshots of the application can be added here:
+
+```text
+Landing Page
+Dashboard
+Transactions
+Goals
+Statistics
+Settings
+```
+
+## 👨‍💻 Author
+
+**Miras**
+
+GitHub:
+https://github.com/MirasXX1
+
+## 📄 License
+
+This project is licensed under the MIT License.
