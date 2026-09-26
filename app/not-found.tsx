@@ -1,9 +1,14 @@
+"use client";
+
 import Link from "next/link";
 import { Compass } from "lucide-react";
 
+import { useI18n } from "@/components/i18n-provider";
 import { Button } from "@/components/ui/button";
 
 export default function NotFound() {
+  const { t } = useI18n();
+
   return (
     <div className="flex min-h-screen flex-col items-center justify-center gap-4 text-center">
       <span className="flex size-12 items-center justify-center rounded-full bg-muted">
@@ -11,15 +16,17 @@ export default function NotFound() {
       </span>
 
       <div>
-        <h1 className="text-lg font-semibold">Page not found.</h1>
+        <h1 className="text-lg font-semibold">
+          {t.common.noData}
+        </h1>
 
         <p className="mt-1 text-sm text-muted-foreground">
-          The page you are looking for does not exist or has been moved.
+          {t.common.noData}
         </p>
       </div>
 
       <Button asChild>
-        <Link href="/">Back to Home</Link>
+        <Link href="/">{t.common.back}</Link>
       </Button>
     </div>
   );

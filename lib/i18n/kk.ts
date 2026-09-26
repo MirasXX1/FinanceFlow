@@ -47,7 +47,8 @@ export const kk = {
 
   transactions: {
     title: "Транзакциялар",
-    subtitle: "Транзакцияларды іздеңіз, сүзгіден өткізіңіз және басқарыңыз.",
+    subtitle:
+      "Транзакцияларды іздеңіз, сүзгіден өткізіңіз және басқарыңыз.",
     addTransaction: "Транзакция қосу",
     editTransaction: "Транзакцияны өзгерту",
     deleteTransaction: "Транзакцияны жою",
@@ -93,7 +94,8 @@ export const kk = {
 
   goals: {
     title: "Мақсаттар",
-    subtitle: "Қаржылық мақсаттар қойып, прогресті бақылаңыз.",
+    subtitle:
+      "Қаржылық мақсаттар қойып, прогресті бақылаңыз.",
     totalGoals: "Жалпы мақсаттар",
     completed: "Аяқталған",
     totalTarget: "Жалпы мақсат сомасы",
@@ -124,15 +126,20 @@ export const kk = {
     monthlyAnalysisDescription:
       "Соңғы 12 айдағы кірістер мен шығыстар.",
     topCategories: "Негізгі санаттар",
-    topCategoriesDescription: "Барлық уақыттағы ең көп шығындар.",
+    topCategoriesDescription:
+      "Барлық уақыттағы ең көп шығындар.",
     expenseCategories: "Шығыс санаттары",
-    expenseCategoriesDescription: "Шығыстарыңыздың бөлінуі.",
+    expenseCategoriesDescription:
+      "Шығыстарыңыздың бөлінуі.",
     spendingTrend: "Шығындар динамикасы",
-    spendingTrendDescription: "Уақыт бойынша айлық шығындар.",
+    spendingTrendDescription:
+      "Уақыт бойынша айлық шығындар.",
     insights: "Талдау",
-    insightsDescription: "Деректеріңізге негізделген нақты байқаулар.",
+    insightsDescription:
+      "Деректеріңізге негізделген нақты байқаулар.",
     noExpenseData: "Әзірге шығындар туралы дерек жоқ.",
-    largestCategory: "Осы айдағы ең үлкен шығыс санатыңыз",
+    largestCategory:
+      "Осы айдағы ең үлкен шығыс санатыңыз",
     youSpent: "жұмсадыңыз",
     incomeThisMonth: "Осы айдағы кірісіңіз",
     expensesThisMonth: "ал шығыстарыңыз",
@@ -150,9 +157,11 @@ export const kk = {
     title: "Баптаулар",
     subtitle: "Профиль мен қалауларыңызды басқарыңыз.",
     profile: "Профиль",
-    profileDescription: "Көрсетілетін атыңыз бен электрондық поштаңыз.",
+    profileDescription:
+      "Көрсетілетін атыңыз бен электрондық поштаңыз.",
     preferences: "Қалаулар",
-    preferencesDescription: "Валюта, тақырып және хабарландырулар.",
+    preferencesDescription:
+      "Валюта, тақырып және хабарландырулар.",
     security: "Қауіпсіздік",
     securityDescription:
       "Құпиясөзіңізді өзгертіңіз. Келесі кіру кезінде жаңа құпиясөз қажет болады.",
@@ -207,9 +216,48 @@ export const kk = {
     features: "Сізге қажет нәрсенің бәрі",
     howItWorks: "Қалай жұмыс істейді",
     statistics: "Статистика",
-    seeWhereMoneyGoes: "Ақшаңыздың қайда жұмсалатынын көріңіз",
-    spendingByCategory: "Санаттар бойынша шығындар (мысал)",
-    readyToTakeControl: "Қаржыңызды бақылауға дайынсыз ба?",
+    seeWhereMoneyGoes:
+      "Ақшаңыздың қайда жұмсалатынын көріңіз",
+    spendingByCategory:
+      "Санаттар бойынша шығындар (мысал)",
+    readyToTakeControl:
+      "Қаржыңызды бақылауға дайынсыз ба?",
     login: "Кіру",
+
+    featureBalanceTitle: "Балансыңызды бақылаңыз",
+    featureBalanceText:
+      "Жалпы балансыңыз, кірістеріңіз бен жинақтарыңыздың бірден жаңарғанын көріңіз.",
+
+    featureTransactionsTitle: "Кірістер мен шығыстар",
+    featureTransactionsText:
+      "Транзакцияларды бірнеше секундта қосыңыз, өзгертіңіз және өшіріңіз.",
+
+    featureCategoriesTitle: "Ақылды санаттар",
+    featureCategoriesText:
+      "Шығындарды Тамақ, Көлік, Төлемдер және басқа санаттарға бөліңіз.",
+
+    featureGoalsTitle: "Қаржылық мақсаттар",
+    featureGoalsText:
+      "Маңызды мақсаттарға ақша жинап, прогресті бақылаңыз.",
+
+    featureStatisticsTitle: "Түсінікті статистика",
+    featureStatisticsText:
+      "Графиктер ақшаңыздың әр айда қайда жұмсалатынын көрсетеді.",
+
+    featureSecurityTitle: "Құпиялылық және қауіпсіздік",
+    featureSecurityText:
+      "Деректеріңіз қорғалған және тек сізге көрінеді.",
+
+    stepCreateAccountTitle: "Аккаунт жасаңыз",
+    stepCreateAccountText:
+      "Бір минуттан аз уақытта тегін тіркеліңіз.",
+
+    stepTransactionsTitle: "Транзакцияларды қосыңыз",
+    stepTransactionsText:
+      "Кірістер мен шығыстарды болған кезде тіркеп отырыңыз.",
+
+    stepUnderstandMoneyTitle: "Қаржыңызды түсініңіз",
+    stepUnderstandMoneyText:
+      "Қаржыңызды жақсырақ басқару үшін графиктер мен мақсаттарды пайдаланыңыз.",
   },
 } as const;

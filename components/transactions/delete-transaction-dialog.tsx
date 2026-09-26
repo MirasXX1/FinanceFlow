@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState } from "react";
@@ -15,6 +16,8 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { formatMoney } from "@/lib/format";
+import { useI18n } from "@/components/i18n-provider";
+
 import type { TransactionRow } from "@/lib/types";
 
 type DeleteTransactionDialogProps = {
@@ -30,6 +33,7 @@ export function DeleteTransactionDialog({
 }: DeleteTransactionDialogProps) {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
+  const { t } = useI18n();
 
   async function handleDelete() {
     if (!transaction) return;
@@ -37,9 +41,12 @@ export function DeleteTransactionDialog({
     try {
       setLoading(true);
 
-      const response = await fetch(`/api/transactions/${transaction.id}`, {
-        method: "DELETE",
-      });
+      const response = await fetch(
+        `/api/transactions/${transaction.id}`,
+        {
+          method: "DELETE",
+        }
+      );
 
       const data = await response.json().catch(() => null);
 
@@ -59,25 +66,36 @@ export function DeleteTransactionDialog({
   }
 
   return (
-    <AlertDialog open={Boolean(transaction)} onOpenChange={onOpenChange}>
+    <AlertDialog
+      open={Boolean(transaction)}
+      onOpenChange={onOpenChange}
+    >
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>Delete this transaction?</AlertDialogTitle>
+          <AlertDialogTitle>
+            {t.transactions.deleteTransaction}?
+          </AlertDialogTitle>
 
           <AlertDialogDescription>
             {transaction && (
               <>
-                &ldquo;{transaction.description || transaction.categoryName || "Transaction"}&rdquo; (
+                &ldquo;
+                {transaction.description ||
+                  transaction.categoryName ||
+                  t.transactions.title}
+                &rdquo; (
                 {transaction.type === "INCOME" ? "+" : "-"}
-                {formatMoney(transaction.amount, currency)}) will be permanently removed. This
-                action cannot be undone.
+                {formatMoney(transaction.amount, currency)}) will be
+                permanently removed. This action cannot be undone.
               </>
             )}
           </AlertDialogDescription>
         </AlertDialogHeader>
 
         <AlertDialogFooter>
-          <AlertDialogCancel disabled={loading}>Cancel</AlertDialogCancel>
+          <AlertDialogCancel disabled={loading}>
+            {t.common.cancel}
+          </AlertDialogCancel>
 
           <AlertDialogAction
             onClick={(event) => {
@@ -86,7 +104,9 @@ export function DeleteTransactionDialog({
             }}
             disabled={loading}
           >
-            {loading ? "Deleting..." : "Delete"}
+            {loading
+              ? `${t.transactions.deleteTransaction}...`
+              : t.transactions.deleteTransaction}
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

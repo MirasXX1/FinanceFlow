@@ -4,8 +4,12 @@ import { FormEvent, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
+import { useI18n } from "@/components/i18n-provider";
+import { LanguageSwitcher } from "@/components/layout/language-switcher";
+
 export default function RegisterPage() {
   const router = useRouter();
+  const { t } = useI18n();
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -14,7 +18,9 @@ export default function RegisterPage() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(
+    event: FormEvent<HTMLFormElement>
+  ) {
     event.preventDefault();
 
     setError("");
@@ -36,13 +42,13 @@ export default function RegisterPage() {
       const data = await response.json();
 
       if (!response.ok) {
-        setError(data.error ?? "Registration failed.");
+        setError(data.error ?? t.auth.register);
         return;
       }
 
       router.push("/login");
     } catch {
-      setError("Something went wrong. Please try again.");
+      setError(t.auth.register);
     } finally {
       setLoading(false);
     }
@@ -50,32 +56,41 @@ export default function RegisterPage() {
 
   return (
     <main className="flex min-h-screen items-center justify-center px-4">
+      <div className="absolute right-4 top-4">
+        <LanguageSwitcher />
+      </div>
+
       <div className="w-full max-w-md">
         <div className="mb-8 text-center">
           <h1 className="text-3xl font-bold tracking-tight">
-            Create your account
+            {t.auth.register}
           </h1>
 
           <p className="mt-2 text-muted-foreground">
-            Start managing your finances with FinanceFlow.
+            {t.auth.register}
           </p>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form
+          onSubmit={handleSubmit}
+          className="space-y-4"
+        >
           <div>
             <label
               htmlFor="name"
               className="mb-2 block text-sm font-medium"
             >
-              Name
+              {t.settings.name}
             </label>
 
             <input
               id="name"
               type="text"
               value={name}
-              onChange={(event) => setName(event.target.value)}
-              placeholder="Miras"
+              onChange={(event) =>
+                setName(event.target.value)
+              }
+              placeholder={t.settings.name}
               className="w-full rounded-lg border bg-background px-3 py-2 outline-none focus:ring-2"
             />
           </div>
@@ -85,7 +100,7 @@ export default function RegisterPage() {
               htmlFor="email"
               className="mb-2 block text-sm font-medium"
             >
-              Email
+              {t.auth.email}
             </label>
 
             <input
@@ -93,8 +108,10 @@ export default function RegisterPage() {
               type="email"
               required
               value={email}
-              onChange={(event) => setEmail(event.target.value)}
-              placeholder="you@example.com"
+              onChange={(event) =>
+                setEmail(event.target.value)
+              }
+              placeholder={t.auth.email}
               className="w-full rounded-lg border bg-background px-3 py-2 outline-none focus:ring-2"
             />
           </div>
@@ -104,7 +121,7 @@ export default function RegisterPage() {
               htmlFor="password"
               className="mb-2 block text-sm font-medium"
             >
-              Password
+              {t.auth.password}
             </label>
 
             <input
@@ -113,8 +130,10 @@ export default function RegisterPage() {
               required
               minLength={8}
               value={password}
-              onChange={(event) => setPassword(event.target.value)}
-              placeholder="Minimum 8 characters"
+              onChange={(event) =>
+                setPassword(event.target.value)
+              }
+              placeholder={t.settings.passwordMinLength}
               className="w-full rounded-lg border bg-background px-3 py-2 outline-none focus:ring-2"
             />
           </div>
@@ -130,17 +149,19 @@ export default function RegisterPage() {
             disabled={loading}
             className="w-full rounded-lg bg-primary px-4 py-2 font-medium text-primary-foreground transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50"
           >
-            {loading ? "Creating account..." : "Create account"}
+            {loading
+              ? t.common.loading
+              : t.auth.register}
           </button>
         </form>
 
         <p className="mt-6 text-center text-sm text-muted-foreground">
-          Already have an account?{" "}
+          {t.auth.haveAccount}{" "}
           <Link
             href="/login"
             className="font-medium text-foreground underline underline-offset-4"
           >
-            Sign in
+            {t.auth.login}
           </Link>
         </p>
       </div>

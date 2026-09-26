@@ -1,13 +1,29 @@
+
 import { NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
+
 import { prisma } from "@/lib/prisma";
+
+const DEFAULT_CATEGORIES = [
+  { name: "Food", icon: "utensils" },
+  { name: "Transport", icon: "car" },
+  { name: "Entertainment", icon: "gamepad-2" },
+  { name: "Education", icon: "book-open" },
+  { name: "Shopping", icon: "shopping-bag" },
+  { name: "Health", icon: "heart-pulse" },
+  { name: "Bills", icon: "receipt" },
+  { name: "Travel", icon: "plane" },
+  { name: "Other", icon: "ellipsis" },
+];
 
 export async function POST(request: Request) {
   try {
     const body = await request.json();
 
     const name = String(body.name ?? "").trim();
-    const email = String(body.email ?? "").trim().toLowerCase();
+    const email = String(body.email ?? "")
+      .trim()
+      .toLowerCase();
     const password = String(body.password ?? "");
 
     if (!email || !password) {
@@ -42,6 +58,9 @@ export async function POST(request: Request) {
         name: name || null,
         email,
         passwordHash,
+        categories: {
+          create: DEFAULT_CATEGORIES,
+        },
       },
       select: {
         id: true,
@@ -66,3 +85,4 @@ export async function POST(request: Request) {
     );
   }
 }
+

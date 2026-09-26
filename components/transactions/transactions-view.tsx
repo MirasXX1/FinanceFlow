@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, useTransition } from "react";
@@ -11,6 +12,8 @@ import { TransactionsToolbar } from "@/components/transactions/transactions-tool
 import { TransactionsTable } from "@/components/transactions/transactions-table";
 import { TransactionsPagination } from "@/components/transactions/transactions-pagination";
 import { DeleteTransactionDialog } from "@/components/transactions/delete-transaction-dialog";
+import { useI18n } from "@/components/i18n-provider";
+
 import type { CategoryOption, TransactionRow } from "@/lib/types";
 
 type TransactionsViewProps = {
@@ -41,6 +44,8 @@ export function TransactionsView({
   const [editing, setEditing] = useState<TransactionRow | null>(null);
   const [deleting, setDeleting] = useState<TransactionRow | null>(null);
 
+  const { t } = useI18n();
+
   function resetFilters() {
     startTransition(() => {
       router.push("/transactions", { scroll: false });
@@ -52,7 +57,7 @@ export function TransactionsView({
       <div className="mb-4 flex items-center justify-end">
         <Button onClick={() => setCreateOpen(true)} className="gap-2">
           <Plus className="size-4" />
-          Add Transaction
+          {t.transactions.addTransaction}
         </Button>
       </div>
 
@@ -68,15 +73,21 @@ export function TransactionsView({
                 </span>
 
                 <div>
-                  <p className="font-medium">No transactions match your filters.</p>
+                  <p className="font-medium">
+                    {t.transactions.noMatchingTransactions}
+                  </p>
 
                   <p className="mt-1 text-sm text-muted-foreground">
-                    Try changing the search or clearing the filters.
+                    {t.transactions.subtitle}
                   </p>
                 </div>
 
-                <Button variant="outline" onClick={resetFilters} disabled={isPending}>
-                  Reset filters
+                <Button
+                  variant="outline"
+                  onClick={resetFilters}
+                  disabled={isPending}
+                >
+                  {t.transactions.resetFilters}
                 </Button>
               </CardContent>
             </Card>
@@ -110,16 +121,21 @@ export function TransactionsView({
             </span>
 
             <div>
-              <p className="font-medium">No transactions yet.</p>
+              <p className="font-medium">
+                {t.transactions.noTransactions}
+              </p>
 
               <p className="mt-1 text-sm text-muted-foreground">
-                Add your first income or expense to start tracking your money.
+                {t.transactions.addTransaction}
               </p>
             </div>
 
-            <Button onClick={() => setCreateOpen(true)} className="gap-2">
+            <Button
+              onClick={() => setCreateOpen(true)}
+              className="gap-2"
+            >
               <Plus className="size-4" />
-              Add Transaction
+              {t.transactions.addTransaction}
             </Button>
           </CardContent>
         </Card>
@@ -150,3 +166,4 @@ export function TransactionsView({
     </div>
   );
 }
+

@@ -1,6 +1,12 @@
+
 "use client";
 
-import { ArrowDownCircle, ArrowUpCircle, Pencil, Trash2 } from "lucide-react";
+import {
+  ArrowDownCircle,
+  ArrowUpCircle,
+  Pencil,
+  Trash2,
+} from "lucide-react";
 
 import { CategoryIcon } from "@/components/categories/category-icon";
 import { Badge } from "@/components/ui/badge";
@@ -15,6 +21,8 @@ import {
 } from "@/components/ui/table";
 import { formatDayMonth, formatMoney } from "@/lib/format";
 import { cn } from "@/lib/utils";
+import { useI18n } from "@/components/i18n-provider";
+
 import type { TransactionRow } from "@/lib/types";
 
 type TransactionsTableProps = {
@@ -24,12 +32,54 @@ type TransactionsTableProps = {
   onDelete: (transaction: TransactionRow) => void;
 };
 
+function getCategoryTranslation(
+  name: string,
+  categories: {
+    food: string;
+    transport: string;
+    entertainment: string;
+    education: string;
+    shopping: string;
+    health: string;
+    bills: string;
+    travel: string;
+    other: string;
+  }
+) {
+  const normalized = name.trim().toLowerCase();
+
+  switch (normalized) {
+    case "food":
+      return categories.food;
+    case "transport":
+      return categories.transport;
+    case "entertainment":
+      return categories.entertainment;
+    case "education":
+      return categories.education;
+    case "shopping":
+      return categories.shopping;
+    case "health":
+      return categories.health;
+    case "bills":
+      return categories.bills;
+    case "travel":
+      return categories.travel;
+    case "other":
+      return categories.other;
+    default:
+      return name;
+  }
+}
+
 export function TransactionsTable({
   transactions,
   currency,
   onEdit,
   onDelete,
 }: TransactionsTableProps) {
+  const { t } = useI18n();
+
   return (
     <>
       {/* Desktop table */}
@@ -37,18 +87,29 @@ export function TransactionsTable({
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>Date</TableHead>
-              <TableHead>Description</TableHead>
-              <TableHead>Category</TableHead>
-              <TableHead>Type</TableHead>
-              <TableHead className="text-right">Amount</TableHead>
-              <TableHead className="w-24 text-right">Actions</TableHead>
+              <TableHead>{t.transactions.date}</TableHead>
+              <TableHead>{t.transactions.description}</TableHead>
+              <TableHead>{t.transactions.category}</TableHead>
+              <TableHead>{t.transactions.type}</TableHead>
+              <TableHead className="text-right">
+                {t.transactions.amount}
+              </TableHead>
+              <TableHead className="w-24 text-right">
+                {t.transactions.actions}
+              </TableHead>
             </TableRow>
           </TableHeader>
 
           <TableBody>
             {transactions.map((transaction) => {
               const isIncome = transaction.type === "INCOME";
+
+              const categoryName = transaction.categoryName
+                ? getCategoryTranslation(
+                    transaction.categoryName,
+                    t.categories
+                  )
+                : null;
 
               return (
                 <TableRow key={transaction.id}>
@@ -58,18 +119,21 @@ export function TransactionsTable({
 
                   <TableCell className="max-w-64">
                     <span className="block truncate font-medium">
-                      {transaction.description || "Transaction"}
+                      {transaction.description ||
+                        t.transactions.addTransaction}
                     </span>
                   </TableCell>
 
                   <TableCell>
-                    {transaction.categoryName ? (
+                    {categoryName ? (
                       <span className="flex items-center gap-2 text-muted-foreground">
                         <CategoryIcon icon={transaction.categoryIcon} />
-                        {transaction.categoryName}
+                        {categoryName}
                       </span>
                     ) : (
-                      <span className="text-muted-foreground/60">—</span>
+                      <span className="text-muted-foreground/60">
+                        —
+                      </span>
                     )}
                   </TableCell>
 
@@ -88,14 +152,19 @@ export function TransactionsTable({
                       ) : (
                         <ArrowDownCircle className="size-3" />
                       )}
-                      {isIncome ? "Income" : "Expense"}
+
+                      {isIncome
+                        ? t.transactions.income
+                        : t.transactions.expense}
                     </Badge>
                   </TableCell>
 
                   <TableCell
                     className={cn(
-                      "text-right font-semibold whitespace-nowrap",
-                      isIncome ? "text-emerald-600" : "text-red-600"
+                      "whitespace-nowrap text-right font-semibold",
+                      isIncome
+                        ? "text-emerald-600"
+                        : "text-red-600"
                     )}
                   >
                     {isIncome ? "+" : "-"}
@@ -108,7 +177,7 @@ export function TransactionsTable({
                         variant="ghost"
                         size="icon"
                         onClick={() => onEdit(transaction)}
-                        aria-label={`Edit transaction from ${formatDayMonth(transaction.date)}`}
+                        aria-label={`${t.transactions.editTransaction} ${formatDayMonth(transaction.date)}`}
                       >
                         <Pencil className="size-4" />
                       </Button>
@@ -117,7 +186,7 @@ export function TransactionsTable({
                         variant="ghost"
                         size="icon"
                         onClick={() => onDelete(transaction)}
-                        aria-label={`Delete transaction from ${formatDayMonth(transaction.date)}`}
+                        aria-label={`${t.transactions.deleteTransaction} ${formatDayMonth(transaction.date)}`}
                         className="text-destructive hover:text-destructive"
                       >
                         <Trash2 className="size-4" />
@@ -136,8 +205,18 @@ export function TransactionsTable({
         {transactions.map((transaction) => {
           const isIncome = transaction.type === "INCOME";
 
+          const categoryName = transaction.categoryName
+            ? getCategoryTranslation(
+                transaction.categoryName,
+                t.categories
+              )
+            : null;
+
           return (
-            <div key={transaction.id} className="flex items-center gap-3 py-3">
+            <div
+              key={transaction.id}
+              className="flex items-center gap-3 py-3"
+            >
               <span
                 className={cn(
                   "flex size-9 shrink-0 items-center justify-center rounded-full",
@@ -146,26 +225,36 @@ export function TransactionsTable({
                     : "bg-red-600/10 text-red-600"
                 )}
               >
-                <CategoryIcon icon={transaction.categoryIcon} className="size-4" />
+                <CategoryIcon
+                  icon={transaction.categoryIcon}
+                  className="size-4"
+                />
               </span>
 
               <div className="min-w-0 flex-1">
                 <p className="truncate text-sm font-medium">
-                  {transaction.description || "Transaction"}
+                  {transaction.description ||
+                    t.transactions.addTransaction}
                 </p>
 
                 <p className="text-xs text-muted-foreground">
                   {formatDayMonth(transaction.date)}
-                  {transaction.categoryName ? ` · ${transaction.categoryName}` : ""}
-                  {` · ${isIncome ? "Income" : "Expense"}`}
+                  {categoryName ? ` · ${categoryName}` : ""}
+                  {` · ${
+                    isIncome
+                      ? t.transactions.income
+                      : t.transactions.expense
+                  }`}
                 </p>
               </div>
 
               <div className="flex flex-col items-end gap-1">
                 <span
                   className={cn(
-                    "text-sm font-semibold whitespace-nowrap",
-                    isIncome ? "text-emerald-600" : "text-red-600"
+                    "whitespace-nowrap text-sm font-semibold",
+                    isIncome
+                      ? "text-emerald-600"
+                      : "text-red-600"
                   )}
                 >
                   {isIncome ? "+" : "-"}
@@ -178,7 +267,7 @@ export function TransactionsTable({
                     size="icon"
                     className="size-7"
                     onClick={() => onEdit(transaction)}
-                    aria-label="Edit transaction"
+                    aria-label={t.transactions.editTransaction}
                   >
                     <Pencil className="size-3.5" />
                   </Button>
@@ -188,7 +277,7 @@ export function TransactionsTable({
                     size="icon"
                     className="size-7 text-destructive hover:text-destructive"
                     onClick={() => onDelete(transaction)}
-                    aria-label="Delete transaction"
+                    aria-label={t.transactions.deleteTransaction}
                   >
                     <Trash2 className="size-3.5" />
                   </Button>

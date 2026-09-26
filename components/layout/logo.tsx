@@ -1,14 +1,18 @@
-
 import Image from "next/image";
 import Link from "next/link";
+
 import { APP_NAME } from "@/lib/constants";
 
 export function Logo({ href = "/" }: { href?: string }) {
   return (
-    <Link href={href} className="flex items-center gap-2 font-semibold">
+    <Link
+      href={href}
+      className="flex items-center gap-2 font-semibold"
+      aria-label={APP_NAME}
+    >
       <Image
         src="/finance.jpeg"
-        alt="FinanceFlow logo"
+        alt={APP_NAME}
         width={32}
         height={32}
         className="rounded-lg object-cover"
@@ -20,4 +24,3 @@ export function Logo({ href = "/" }: { href?: string }) {
     </Link>
   );
 }
-

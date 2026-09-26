@@ -1,7 +1,13 @@
 "use client";
 
 import { useState } from "react";
-import { CalendarDays, CheckCircle2, Pencil, Target, Trash2 } from "lucide-react";
+import {
+  CalendarDays,
+  CheckCircle2,
+  Pencil,
+  Target,
+  Trash2,
+} from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -12,10 +18,14 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
-import { GoalFormDialog, resolveGoalColor } from "@/components/goals/goal-form-dialog";
+import {
+  GoalFormDialog,
+  resolveGoalColor,
+} from "@/components/goals/goal-form-dialog";
 import { DeleteGoalDialog } from "@/components/goals/delete-goal-dialog";
 import { formatLongDate, formatMoney } from "@/lib/format";
 import { cn } from "@/lib/utils";
+import { useI18n } from "@/components/i18n-provider";
 import type { GoalRow } from "@/lib/types";
 
 type GoalsViewProps = {
@@ -27,13 +37,14 @@ export function GoalsView({ goals, currency }: GoalsViewProps) {
   const [createOpen, setCreateOpen] = useState(false);
   const [editing, setEditing] = useState<GoalRow | null>(null);
   const [deleting, setDeleting] = useState<GoalRow | null>(null);
+  const { t } = useI18n();
 
   return (
     <>
       <div className="mb-4 flex items-center justify-end">
         <Button onClick={() => setCreateOpen(true)} className="gap-2">
           <Target className="size-4" />
-          Add Goal
+          {t.goals.addGoal}
         </Button>
       </div>
 
@@ -45,16 +56,16 @@ export function GoalsView({ goals, currency }: GoalsViewProps) {
             </span>
 
             <div>
-              <p className="font-medium">No goals yet.</p>
+              <p className="font-medium">{t.goals.noGoals}</p>
 
               <p className="mt-1 text-sm text-muted-foreground">
-                Set your first savings goal and watch your progress grow.
+                {t.goals.subtitle}
               </p>
             </div>
 
             <Button onClick={() => setCreateOpen(true)} className="gap-2">
               <Target className="size-4" />
-              Add Goal
+              {t.goals.addGoal}
             </Button>
           </CardContent>
         </Card>
@@ -64,7 +75,12 @@ export function GoalsView({ goals, currency }: GoalsViewProps) {
             const color = resolveGoalColor(goal.color);
             const progress =
               goal.targetAmount > 0
-                ? Math.min(100, Math.round((goal.currentAmount / goal.targetAmount) * 100))
+                ? Math.min(
+                    100,
+                    Math.round(
+                      (goal.currentAmount / goal.targetAmount) * 100
+                    )
+                  )
                 : 0;
             const isCompleted = goal.currentAmount >= goal.targetAmount;
 
@@ -81,11 +97,16 @@ export function GoalsView({ goals, currency }: GoalsViewProps) {
                     <CardTitle className="flex items-center gap-2 text-base">
                       {isCompleted && (
                         <CheckCircle2
-                          aria-label="Completed"
+                          aria-label={t.goals.completed}
                           className="size-4 shrink-0 text-emerald-600"
                         />
                       )}
-                      <span className={cn(isCompleted && "line-through opacity-70")}>
+
+                      <span
+                        className={cn(
+                          isCompleted && "line-through opacity-70"
+                        )}
+                      >
                         {goal.name}
                       </span>
                     </CardTitle>
@@ -96,7 +117,7 @@ export function GoalsView({ goals, currency }: GoalsViewProps) {
                         size="icon"
                         className="size-8"
                         onClick={() => setEditing(goal)}
-                        aria-label={`Edit goal ${goal.name}`}
+                        aria-label={`${t.goals.editGoal}: ${goal.name}`}
                       >
                         <Pencil className="size-3.5" />
                       </Button>
@@ -106,7 +127,7 @@ export function GoalsView({ goals, currency }: GoalsViewProps) {
                         size="icon"
                         className="size-8 text-destructive hover:text-destructive"
                         onClick={() => setDeleting(goal)}
-                        aria-label={`Delete goal ${goal.name}`}
+                        aria-label={`${t.goals.deleteGoal}: ${goal.name}`}
                       >
                         <Trash2 className="size-3.5" />
                       </Button>
@@ -125,15 +146,21 @@ export function GoalsView({ goals, currency }: GoalsViewProps) {
 
                   <div className="mt-3">
                     <div className="mb-1.5 flex items-center justify-between text-xs text-muted-foreground">
-                      <span>Progress</span>
-                      <span className="font-medium text-foreground">{progress}%</span>
+                      <span>{t.goals.progress}</span>
+                      <span className="font-medium text-foreground">
+                        {progress}%
+                      </span>
                     </div>
 
                     <Progress
                       value={progress}
-                      aria-label={`${goal.name} progress: ${progress}%`}
-                      indicatorClassName={isCompleted ? "bg-emerald-600" : undefined}
-                      indicatorColor={isCompleted ? undefined : color}
+                      aria-label={`${goal.name}: ${progress}%`}
+                      indicatorClassName={
+                        isCompleted ? "bg-emerald-600" : undefined
+                      }
+                      indicatorColor={
+                        isCompleted ? undefined : color
+                      }
                     />
                   </div>
                 </CardContent>
@@ -142,18 +169,21 @@ export function GoalsView({ goals, currency }: GoalsViewProps) {
                   {goal.deadline ? (
                     <span className="flex items-center gap-1.5">
                       <CalendarDays className="size-3.5" />
+
                       {goal.isOverdue && !isCompleted ? (
                         <span className="font-medium text-destructive">
-                          Overdue · was due {formatLongDate(goal.deadline)}
+                          {t.goals.deleteConfirm} ·{" "}
+                          {formatLongDate(goal.deadline)}
                         </span>
                       ) : (
                         <>
-                          Deadline: {formatLongDate(goal.deadline)}
+                          {t.goals.deadline}:{" "}
+                          {formatLongDate(goal.deadline)}
                         </>
                       )}
                     </span>
                   ) : (
-                    <span>No deadline</span>
+                    <span>{t.goals.noDeadline}</span>
                   )}
                 </CardFooter>
               </Card>

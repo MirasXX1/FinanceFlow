@@ -120,8 +120,7 @@ export const en = {
     netBalance: "Net Balance",
     avgMonthlyExpenses: "Avg. Monthly Expenses",
     monthlyAnalysis: "Monthly Analysis",
-    monthlyAnalysisDescription:
-      "Income vs expenses over the last 12 months.",
+    monthlyAnalysisDescription: "Income vs expenses over the last 12 months.",
     topCategories: "Top Categories",
     topCategoriesDescription: "Highest spending of all time.",
     expenseCategories: "Expense Categories",
@@ -209,5 +208,40 @@ export const en = {
     spendingByCategory: "Spending by category (illustration)",
     readyToTakeControl: "Ready to take control?",
     login: "Login",
+
+    featureBalanceTitle: "Track your balance",
+    featureBalanceText:
+      "See your total balance, income, and savings update instantly.",
+
+    featureTransactionsTitle: "Income & expenses",
+    featureTransactionsText:
+      "Add, edit, and remove transactions in seconds.",
+
+    featureCategoriesTitle: "Smart categories",
+    featureCategoriesText:
+      "Group spending into Food, Transport, Bills, and more.",
+
+    featureGoalsTitle: "Financial goals",
+    featureGoalsText:
+      "Save for what matters and watch your progress grow.",
+
+    featureStatisticsTitle: "Clear statistics",
+    featureStatisticsText:
+      "Charts show where your money goes each month.",
+
+    featureSecurityTitle: "Private & secure",
+    featureSecurityText:
+      "Your data is protected and only visible to you.",
+
+    stepCreateAccountTitle: "Create your account",
+    stepCreateAccountText: "Sign up for free in under a minute.",
+
+    stepTransactionsTitle: "Add your transactions",
+    stepTransactionsText:
+      "Record income and expenses as they happen.",
+
+    stepUnderstandMoneyTitle: "Understand your money",
+    stepUnderstandMoneyText:
+      "Use charts and goals to make better decisions.",
   },
 } as const;

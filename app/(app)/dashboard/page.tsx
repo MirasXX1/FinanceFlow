@@ -180,50 +180,58 @@ export default async function DashboardPage() {
               </div>
             ) : (
               <div className="space-y-4">
-                {transactions.map((transaction) => (
-                  <div
-                    key={transaction.id}
-                    className="flex items-center justify-between gap-3"
-                  >
-                    <div className="flex min-w-0 items-center gap-2.5">
+                {transactions.map((transaction) => {
+                  const categoryKey = transaction.category?.name
+                    ? `categories.${transaction.category.name
+                        .trim()
+                        .toLowerCase()}`
+                    : "categories.other";
+
+                  return (
+                    <div
+                      key={transaction.id}
+                      className="flex items-center justify-between gap-3"
+                    >
+                      <div className="flex min-w-0 items-center gap-2.5">
+                        <span
+                          className={
+                            transaction.type === "INCOME"
+                              ? "flex size-8 shrink-0 items-center justify-center rounded-full bg-emerald-600/10 text-emerald-600"
+                              : "flex size-8 shrink-0 items-center justify-center rounded-full bg-red-600/10 text-red-600"
+                          }
+                        >
+                          <CategoryIcon
+                            icon={transaction.category?.icon}
+                          />
+                        </span>
+
+                        <div className="min-w-0">
+                          <p className="truncate text-sm font-medium">
+                            {transaction.description || (
+                              <I18nText k="dashboard.transaction" />
+                            )}
+                          </p>
+
+                          <p className="text-xs text-muted-foreground">
+                            <I18nText k={categoryKey} />{" "}
+                            · {formatDayMonth(transaction.date)}
+                          </p>
+                        </div>
+                      </div>
+
                       <span
                         className={
                           transaction.type === "INCOME"
-                            ? "flex size-8 shrink-0 items-center justify-center rounded-full bg-emerald-600/10 text-emerald-600"
-                            : "flex size-8 shrink-0 items-center justify-center rounded-full bg-red-600/10 text-red-600"
+                            ? "text-sm font-semibold text-emerald-600"
+                            : "text-sm font-semibold text-red-600"
                         }
                       >
-                        <CategoryIcon icon={transaction.category?.icon} />
+                        {transaction.type === "INCOME" ? "+" : "-"}
+                        {formatMoney(Number(transaction.amount))}
                       </span>
-
-                      <div className="min-w-0">
-                        <p className="truncate text-sm font-medium">
-                          {transaction.description || (
-                            <I18nText k="dashboard.transaction" />
-                          )}
-                        </p>
-
-                        <p className="text-xs text-muted-foreground">
-                          {transaction.category?.name || (
-                            <I18nText k="categories.other" />
-                          )}{" "}
-                          · {formatDayMonth(transaction.date)}
-                        </p>
-                      </div>
                     </div>
-
-                    <span
-                      className={
-                        transaction.type === "INCOME"
-                          ? "text-sm font-semibold text-emerald-600"
-                          : "text-sm font-semibold text-red-600"
-                      }
-                    >
-                      {transaction.type === "INCOME" ? "+" : "-"}
-                      {formatMoney(Number(transaction.amount))}
-                    </span>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             )}
           </CardContent>

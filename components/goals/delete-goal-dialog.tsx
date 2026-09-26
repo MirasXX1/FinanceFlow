@@ -14,6 +14,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
+import { useI18n } from "@/components/i18n-provider";
 import type { GoalRow } from "@/lib/types";
 
 type DeleteGoalDialogProps = {
@@ -21,9 +22,13 @@ type DeleteGoalDialogProps = {
   onOpenChange: (open: boolean) => void;
 };
 
-export function DeleteGoalDialog({ goal, onOpenChange }: DeleteGoalDialogProps) {
+export function DeleteGoalDialog({
+  goal,
+  onOpenChange,
+}: DeleteGoalDialogProps) {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
+  const { t } = useI18n();
 
   async function handleDelete() {
     if (!goal) return;
@@ -38,38 +43,44 @@ export function DeleteGoalDialog({ goal, onOpenChange }: DeleteGoalDialogProps) 
       const data = await response.json().catch(() => null);
 
       if (!response.ok) {
-        toast.error(data?.error || "Failed to delete goal.");
+        toast.error(data?.error || t.goals.deleteGoal);
         return;
       }
 
-      toast.success("Goal deleted.");
+      toast.success(t.goals.deleteGoal);
       onOpenChange(false);
       router.refresh();
     } catch {
-      toast.error("Network error. Please try again.");
+      toast.error(t.goals.deleteGoal);
     } finally {
       setLoading(false);
     }
   }
 
   return (
-    <AlertDialog open={Boolean(goal)} onOpenChange={onOpenChange}>
+    <AlertDialog
+      open={Boolean(goal)}
+      onOpenChange={onOpenChange}
+    >
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>Delete this goal?</AlertDialogTitle>
+          <AlertDialogTitle>
+            {t.goals.deleteConfirm}
+          </AlertDialogTitle>
 
           <AlertDialogDescription>
             {goal && (
               <>
-                &ldquo;{goal.name}&rdquo; and its progress will be permanently removed. This
-                action cannot be undone.
+                &ldquo;{goal.name}&rdquo; {t.goals.deleteConfirm}
               </>
             )}
           </AlertDialogDescription>
         </AlertDialogHeader>
 
         <AlertDialogFooter>
-          <AlertDialogCancel disabled={loading}>Cancel</AlertDialogCancel>
+          <AlertDialogCancel disabled={loading}>
+            {t.common.cancel}
+          </AlertDialogCancel>
 
           <AlertDialogAction
             onClick={(event) => {
@@ -78,7 +89,9 @@ export function DeleteGoalDialog({ goal, onOpenChange }: DeleteGoalDialogProps) 
             }}
             disabled={loading}
           >
-            {loading ? "Deleting..." : "Delete"}
+            {loading
+              ? `${t.common.delete}...`
+              : t.common.delete}
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

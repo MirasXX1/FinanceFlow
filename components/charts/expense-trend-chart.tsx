@@ -12,6 +12,7 @@ import {
 import { TrendingDown } from "lucide-react";
 
 import type { MonthlyPoint } from "@/components/charts/income-expense-chart";
+import { useI18n } from "@/components/i18n-provider";
 
 type ExpenseTrendChartProps = {
   data: MonthlyPoint[];
@@ -35,31 +36,67 @@ function formatMoney(value: number, currency: string) {
   }).format(value);
 }
 
-export function ExpenseTrendChart({ data, currency }: ExpenseTrendChartProps) {
+export function ExpenseTrendChart({
+  data,
+  currency,
+}: ExpenseTrendChartProps) {
+  const { t } = useI18n();
+
   const total = data.reduce((sum, point) => sum + point.expenses, 0);
 
   if (total === 0) {
     return (
       <div className="flex h-64 flex-col items-center justify-center gap-2 text-center">
-        <TrendingDown className="size-8 text-muted-foreground/50" aria-hidden />
+        <TrendingDown
+          className="size-8 text-muted-foreground/50"
+          aria-hidden
+        />
 
-        <p className="text-sm font-medium">No expense trend yet.</p>
+        <p className="text-sm font-medium">
+          {t.charts.noExpenseTrend}
+        </p>
 
         <p className="text-sm text-muted-foreground">
-          Record expenses to see how your spending changes over time.
+          {t.charts.noData}
         </p>
       </div>
     );
   }
 
   return (
-    <div className="h-64 w-full" role="img" aria-label="Monthly expense trend chart">
+    <div
+      className="h-64 w-full"
+      role="img"
+      aria-label={t.charts.noExpenseTrend}
+    >
       <ResponsiveContainer width="100%" height="100%">
-        <AreaChart data={data} margin={{ top: 8, right: 8, left: 0, bottom: 0 }}>
+        <AreaChart
+          data={data}
+          margin={{
+            top: 8,
+            right: 8,
+            left: 0,
+            bottom: 0,
+          }}
+        >
           <defs>
-            <linearGradient id="expenseTrendFill" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor="#ef4444" stopOpacity={0.25} />
-              <stop offset="100%" stopColor="#ef4444" stopOpacity={0} />
+            <linearGradient
+              id="expenseTrendFill"
+              x1="0"
+              y1="0"
+              x2="0"
+              y2="1"
+            >
+              <stop
+                offset="0%"
+                stopColor="#ef4444"
+                stopOpacity={0.25}
+              />
+              <stop
+                offset="100%"
+                stopColor="#ef4444"
+                stopOpacity={0}
+              />
             </linearGradient>
           </defs>
 
@@ -84,16 +121,21 @@ export function ExpenseTrendChart({ data, currency }: ExpenseTrendChartProps) {
             axisLine={false}
             tick={{ fontSize: 12 }}
             width={56}
-            tickFormatter={(value: number) => formatCompact(value, currency)}
+            tickFormatter={(value: number) =>
+              formatCompact(value, currency)
+            }
           />
 
           <Tooltip
             cursor={{ stroke: "var(--border)" }}
             labelFormatter={(_, payload) =>
-              (payload?.[0]?.payload as MonthlyPoint | undefined)?.monthYear ??
-              String(_)
+              (payload?.[0]?.payload as MonthlyPoint | undefined)
+                ?.monthYear ?? String(_)
             }
-            formatter={(value) => [formatMoney(Number(value), currency), "Expenses"]}
+            formatter={(value) => [
+              formatMoney(Number(value), currency),
+              t.charts.expenses,
+            ]}
             contentStyle={{
               borderRadius: "0.75rem",
               border: "1px solid var(--border)",
@@ -106,11 +148,15 @@ export function ExpenseTrendChart({ data, currency }: ExpenseTrendChartProps) {
           <Area
             type="monotone"
             dataKey="expenses"
-            name="Expenses"
+            name={t.charts.expenses}
             stroke="#ef4444"
             strokeWidth={2}
             fill="url(#expenseTrendFill)"
-            dot={{ r: 3, fill: "#ef4444", strokeWidth: 0 }}
+            dot={{
+              r: 3,
+              fill: "#ef4444",
+              strokeWidth: 0,
+            }}
             activeDot={{ r: 5 }}
           />
         </AreaChart>

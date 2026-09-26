@@ -4,6 +4,7 @@ import { prisma } from "@/lib/prisma";
 import { requireAuth } from "@/lib/auth";
 import type { CurrencyCode } from "@/lib/format";
 
+import { I18nText } from "@/components/i18n-text";
 import { PageHeader } from "@/components/layout/page-header";
 import {
   PasswordForm,
@@ -42,8 +43,8 @@ export default async function SettingsPage() {
   return (
     <>
       <PageHeader
-        title="Settings"
-        description="Manage your profile and preferences."
+        title={<I18nText k="settings.title" />}
+        description={<I18nText k="settings.subtitle" />}
       />
 
       <div className="space-y-6">
@@ -51,16 +52,21 @@ export default async function SettingsPage() {
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-base">
               <UserRound className="size-4 text-muted-foreground" />
-              Profile
+              <I18nText k="settings.profile" />
             </CardTitle>
 
-            <CardDescription>Your public display name and email.</CardDescription>
+            <CardDescription>
+              <I18nText k="settings.profileDescription" />
+            </CardDescription>
           </CardHeader>
 
           <Separator />
 
           <CardContent className="pt-6">
-            <ProfileForm name={user.name ?? ""} email={user.email} />
+            <ProfileForm
+              name={user.name ?? ""}
+              email={user.email}
+            />
           </CardContent>
         </Card>
 
@@ -68,10 +74,12 @@ export default async function SettingsPage() {
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-base">
               <Palette className="size-4 text-muted-foreground" />
-              Preferences
+              <I18nText k="settings.preferences" />
             </CardTitle>
 
-            <CardDescription>Currency, theme and notifications.</CardDescription>
+            <CardDescription>
+              <I18nText k="settings.preferencesDescription" />
+            </CardDescription>
           </CardHeader>
 
           <Separator />
@@ -80,7 +88,9 @@ export default async function SettingsPage() {
             <PreferencesForm
               currency={user.currency as CurrencyCode}
               theme={user.theme}
-              notificationsEnabled={user.notificationsEnabled}
+              notificationsEnabled={
+                user.notificationsEnabled
+              }
             />
           </CardContent>
         </Card>
@@ -89,11 +99,11 @@ export default async function SettingsPage() {
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-base">
               <KeyRound className="size-4 text-muted-foreground" />
-              Security
+              <I18nText k="settings.security" />
             </CardTitle>
 
             <CardDescription>
-              Change your password. You will need it on your next sign-in.
+              <I18nText k="settings.securityDescription" />
             </CardDescription>
           </CardHeader>
 
@@ -104,10 +114,9 @@ export default async function SettingsPage() {
           </CardContent>
         </Card>
 
-        {/* Reserved for Phase 8 notifications wiring */}
         <p className="flex items-center gap-2 text-xs text-muted-foreground">
           <Bell className="size-3.5" />
-          More notification settings will arrive with goal reminders.
+          <I18nText k="settings.moreNotifications" />
         </p>
       </div>
     </>

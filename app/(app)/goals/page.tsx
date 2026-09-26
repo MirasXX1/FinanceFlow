@@ -5,6 +5,7 @@ import { requireAuth } from "@/lib/auth";
 import type { CurrencyCode } from "@/lib/format";
 import type { GoalRow } from "@/lib/types";
 
+import { I18nText } from "@/components/i18n-text";
 import { PageHeader } from "@/components/layout/page-header";
 import { StatCard } from "@/components/dashboard/stat-card";
 import { GoalsView } from "@/components/goals/goals-view";
@@ -43,38 +44,53 @@ export default async function GoalsPage() {
   }));
 
   const totalGoals = rows.length;
+
   const completedGoals = rows.filter(
-    (goal) => goal.targetAmount > 0 && goal.currentAmount >= goal.targetAmount
+    (goal) =>
+      goal.targetAmount > 0 &&
+      goal.currentAmount >= goal.targetAmount
   ).length;
-  const totalTarget = rows.reduce((sum, goal) => sum + goal.targetAmount, 0);
-  const totalSaved = rows.reduce((sum, goal) => sum + goal.currentAmount, 0);
+
+  const totalTarget = rows.reduce(
+    (sum, goal) => sum + goal.targetAmount,
+    0
+  );
+
+  const totalSaved = rows.reduce(
+    (sum, goal) => sum + goal.currentAmount,
+    0
+  );
 
   return (
     <>
       <PageHeader
-        title="Goals"
-        description="Set financial goals and track your progress."
+        title={<I18nText k="goals.title" />}
+        description={<I18nText k="goals.subtitle" />}
       />
 
       {totalGoals > 0 && (
         <div className="mb-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          <StatCard title="Total Goals" value={String(totalGoals)} icon={Target} />
+          <StatCard
+            title={<I18nText k="goals.totalGoals" />}
+            value={String(totalGoals)}
+            icon={Target}
+          />
 
           <StatCard
-            title="Completed"
+            title={<I18nText k="goals.completed" />}
             value={String(completedGoals)}
             icon={CheckCircle2}
             tone="income"
           />
 
           <StatCard
-            title="Total Target"
+            title={<I18nText k="goals.totalTarget" />}
             value={formatTarget(totalTarget, currency)}
             icon={Flag}
           />
 
           <StatCard
-            title="Total Saved"
+            title={<I18nText k="goals.totalSaved" />}
             value={formatTarget(totalSaved, currency)}
             icon={PiggyBank}
             tone="income"

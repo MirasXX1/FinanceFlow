@@ -3,6 +3,7 @@
 import { useEffect } from "react";
 import { AlertTriangle, RotateCcw } from "lucide-react";
 
+import { useI18n } from "@/components/i18n-provider";
 import { Button } from "@/components/ui/button";
 
 export default function AppError({
@@ -12,6 +13,8 @@ export default function AppError({
   error: Error & { digest?: string };
   reset: () => void;
 }) {
+  const { t } = useI18n();
+
   useEffect(() => {
     // Server-side logging only; the message is never shown to users.
     console.error(error);
@@ -24,16 +27,18 @@ export default function AppError({
       </span>
 
       <div>
-        <h1 className="text-lg font-semibold">Something went wrong.</h1>
+        <h1 className="text-lg font-semibold">
+          {t.common.noData}
+        </h1>
 
         <p className="mt-1 text-sm text-muted-foreground">
-          An unexpected error occurred. Please try again.
+          {t.common.loading}
         </p>
       </div>
 
       <Button onClick={reset} className="gap-2">
         <RotateCcw className="size-4" />
-        Try again
+        {t.common.reset}
       </Button>
     </div>
   );

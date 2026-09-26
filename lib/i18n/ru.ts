@@ -123,15 +123,18 @@ export const ru = {
     monthlyAnalysisDescription:
       "Доходы и расходы за последние 12 месяцев.",
     topCategories: "Основные категории",
-    topCategoriesDescription: "Категории с наибольшими расходами за всё время.",
+    topCategoriesDescription:
+      "Категории с наибольшими расходами за всё время.",
     expenseCategories: "Категории расходов",
     expenseCategoriesDescription: "Распределение ваших расходов.",
     spendingTrend: "Динамика расходов",
     spendingTrendDescription: "Ежемесячные расходы во времени.",
     insights: "Аналитика",
-    insightsDescription: "Фактические наблюдения на основе ваших данных.",
+    insightsDescription:
+      "Фактические наблюдения на основе ваших данных.",
     noExpenseData: "Пока нет данных о расходах.",
-    largestCategory: "Самая крупная категория расходов в этом месяце —",
+    largestCategory:
+      "Самая крупная категория расходов в этом месяце —",
     youSpent: "вы потратили",
     incomeThisMonth: "Ваш доход в этом месяце —",
     expensesThisMonth: "а расходы в этом месяце —",
@@ -210,5 +213,41 @@ export const ru = {
     spendingByCategory: "Расходы по категориям (пример)",
     readyToTakeControl: "Готовы взять финансы под контроль?",
     login: "Войти",
+
+    featureBalanceTitle: "Следите за балансом",
+    featureBalanceText:
+      "Смотрите, как общий баланс, доходы и сбережения обновляются в реальном времени.",
+
+    featureTransactionsTitle: "Доходы и расходы",
+    featureTransactionsText:
+      "Добавляйте, изменяйте и удаляйте транзакции за считанные секунды.",
+
+    featureCategoriesTitle: "Умные категории",
+    featureCategoriesText:
+      "Распределяйте расходы по категориям: Еда, Транспорт, Счета и другим.",
+
+    featureGoalsTitle: "Финансовые цели",
+    featureGoalsText:
+      "Откладывайте на важные цели и следите за прогрессом.",
+
+    featureStatisticsTitle: "Понятная статистика",
+    featureStatisticsText:
+      "Графики показывают, куда уходят ваши деньги каждый месяц.",
+
+    featureSecurityTitle: "Приватность и безопасность",
+    featureSecurityText:
+      "Ваши данные защищены и доступны только вам.",
+
+    stepCreateAccountTitle: "Создайте аккаунт",
+    stepCreateAccountText:
+      "Зарегистрируйтесь бесплатно менее чем за минуту.",
+
+    stepTransactionsTitle: "Добавьте транзакции",
+    stepTransactionsText:
+      "Записывайте доходы и расходы по мере их появления.",
+
+    stepUnderstandMoneyTitle: "Поймите свои финансы",
+    stepUnderstandMoneyText:
+      "Используйте графики и цели, чтобы лучше управлять деньгами.",
   },
 } as const;

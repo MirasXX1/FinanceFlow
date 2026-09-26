@@ -2,32 +2,64 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+
+import { useI18n } from "@/components/i18n-provider";
 import { NAV_ITEMS } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 
 export function MobileNav() {
   const pathname = usePathname();
+  const { t } = useI18n();
+
+  function getLabel(href: string) {
+    switch (href) {
+      case "/dashboard":
+        return t.nav.dashboard;
+
+      case "/transactions":
+        return t.nav.transactions;
+
+      case "/goals":
+        return t.nav.goals;
+
+      case "/statistics":
+        return t.nav.statistics;
+
+      case "/settings":
+        return t.nav.settings;
+
+      default:
+        return "";
+    }
+  }
 
   return (
     <nav
-      aria-label="Mobile navigation"
+      aria-label={t.nav.dashboard}
       className="fixed inset-x-0 bottom-0 z-30 border-t bg-background md:hidden"
     >
       <ul className="grid grid-cols-5">
-        {NAV_ITEMS.map(({ label, href, icon: Icon }) => {
-          const isActive = pathname === href || pathname.startsWith(`${href}/`);
+        {NAV_ITEMS.map(({ href, icon: Icon }) => {
+          const isActive =
+            pathname === href ||
+            pathname.startsWith(`${href}/`);
+
           return (
             <li key={href}>
               <Link
                 href={href}
-                aria-current={isActive ? "page" : undefined}
+                aria-current={
+                  isActive ? "page" : undefined
+                }
                 className={cn(
                   "flex flex-col items-center gap-1 py-2.5 text-[11px] font-medium transition-colors",
-                  isActive ? "text-emerald-600" : "text-muted-foreground"
+                  isActive
+                    ? "text-emerald-600"
+                    : "text-muted-foreground"
                 )}
               >
                 <Icon className="h-5 w-5" />
-                {label}
+                {getLabel(href)}
               </Link>
             </li>
           );

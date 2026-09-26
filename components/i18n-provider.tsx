@@ -1,3 +1,4 @@
+
 "use client";
 
 import {
@@ -227,6 +228,26 @@ type Translations = {
     spendingByCategory: string;
     readyToTakeControl: string;
     login: string;
+
+    featureBalanceTitle: string;
+    featureBalanceText: string;
+    featureTransactionsTitle: string;
+    featureTransactionsText: string;
+    featureCategoriesTitle: string;
+    featureCategoriesText: string;
+    featureGoalsTitle: string;
+    featureGoalsText: string;
+    featureStatisticsTitle: string;
+    featureStatisticsText: string;
+    featureSecurityTitle: string;
+    featureSecurityText: string;
+
+    stepCreateAccountTitle: string;
+    stepCreateAccountText: string;
+    stepTransactionsTitle: string;
+    stepTransactionsText: string;
+    stepUnderstandMoneyTitle: string;
+    stepUnderstandMoneyText: string;
   };
 };
 
@@ -283,3 +304,4 @@ export function useI18n() {
 
   return context;
 }
+

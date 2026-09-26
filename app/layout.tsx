@@ -1,12 +1,13 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
+
 import "./globals.css";
+
 import { ThemeProvider } from "@/components/theme/theme-provider";
 import { I18nProvider } from "@/components/i18n-provider";
 import { Toaster } from "@/components/ui/sonner";
 import { APP_NAME, APP_TAGLINE } from "@/lib/constants";
 
-// Inter variable font, self-hosted (latin subset) — no external font request at build/runtime.
 const inter = localFont({
   src: "./fonts/inter-latin-wght-normal.woff2",
   weight: "100 900",
@@ -19,8 +20,7 @@ export const metadata: Metadata = {
     default: `${APP_NAME} – ${APP_TAGLINE}`,
     template: `%s | ${APP_NAME}`,
   },
-  description:
-    "Track expenses, manage income, set financial goals, and understand where your money goes.",
+  description: APP_TAGLINE,
 };
 
 export default function RootLayout({
